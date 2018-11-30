@@ -531,6 +531,6 @@ cd /usr/bin/
 ln -sf ${youDirectory}/kata-runtime.swapper.sh kata-runtime.swapper
 ```
 
-5.配置 goland，下图中的 Host 和 Port 用于填写远程被调试主机的 IP 地址以及开放的端口号 
+5.配置 goland，下图中的 Host 和 Port 用于填写远程被调试主机的 IP 地址以及开放的端口号：
 
-![](2018-11-30-10-26-57.png)
+![](./assets/goland.png)
