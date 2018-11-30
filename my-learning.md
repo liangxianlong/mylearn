@@ -493,9 +493,6 @@ select {
     },
   "default-runtime": "kata-runtime",
 
-  "registry-mirrors":["https://public-docker-virtual.artnj.zte.com.cn"],
-  "insecure-registries":["public-docker-virtual.artnj.zte.com.cn", "docker.artnj.zte.com.cn"],
-
   "storage-driver":"devicemapper"
 }
 ```
