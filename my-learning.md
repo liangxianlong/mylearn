@@ -64,6 +64,49 @@
 cat /boot/config-`uname -r`
 ```
 
+(2) 查看进程关系
+
+```shell
+ps xf -o pid,ppid,stat,args
+```
+
+(3) push 代码到 gerrit 的 master 分支
+
+```shell
+git push origin HEAD:refs/for/master
+```
+
+(4) push 代码到 git 的 master 分支
+
+```shell
+git push -u origin master   // -u 参数，将本地 master 分支和远程 master 分支关联起来
+```
+
+(5) 使用 journalctl 查看 kata-runtime 日志
+
+```shell
+journalctl -f -t kata-runtime --since now
+journalctl -t kata-runtime --since '1 min ago' > tmp.log
+```
+
+(6) 查看 json 格式的配置文件
+
+```shell
+cat config.json | python -m json.tool
+```
+
+(7) 查看 nat 的 iptables 规则
+
+```shell
+iptables -t nat -S
+```
+
+(8) 查看路由信息
+
+```shell
+ip r
+```
+
 # 8. CI
 
 ## 8.1. kata
