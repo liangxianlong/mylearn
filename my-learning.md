@@ -534,3 +534,19 @@ ln -sf ${youDirectory}/kata-runtime.swapper.sh kata-runtime.swapper
 5.配置 goland，下图中的 Host 和 Port 用于填写远程被调试主机的 IP 地址以及开放的端口号：
 
 ![](./assets/goland.png)
+
+6.在 10.74.120.130 上 执行如下命令
+
+```shell
+docker run --runtime dlv -d -ti busybox /bin/sh
+```
+
+7.在 goland 中于如下代码处加上断点：
+
+```go
+process, err = createSandbox(ctx, ociSpec, runtimeConfig, containerID, bundlePath, console, disableOutput, systemdCgroup)
+```
+
+8.点击 Debug，代码就会断在7中断点处，接下来就可以进行单步调试了:
+
+![](./assets/breakpoint.png)
