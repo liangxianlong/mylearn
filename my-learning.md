@@ -196,7 +196,7 @@ func main() {
         if err != nil {
             log.Print(err)
             continue
-        }
+        }so
         handleConn(conn) //一次处理一个连接
     }
 }
@@ -547,18 +547,9 @@ select {
 
 passby=true
 
-#if [ "${*/create/}" != "$*" ]; then
-    #passby=false
-#fi
-
-#if $passby; then
-    #logger -t swapper -- "passby dlv, kata-runtime $@"
-    #kata-runtime $@
-#else
-    logger -t swapper -- "start dlv headless server, waiting client connecting..."
-    /usr/local/go/bin/dlv exec --api-version=2 --headless --listen=:2345 --log --log-output=rpc /usr/bin/kata-runtime -- $@ 2>&1 |tee -a /tmp/dlv.log
-    logger -t swapper -- "dlv headless server stopped."
-#fi
+logger -t swapper -- "start dlv headless server, waiting client connecting..."
+/usr/local/go/bin/dlv exec --api-version=2 --headless --listen=:2345 --log --log-output=rpc /usr/bin/kata-runtime -- $@ 2>&1 |tee -a /tmp/dlv.log
+logger -t swapper -- "dlv headless server stopped."
 ```
 
 3.将 dlv 二进制文件放到如下目录：
