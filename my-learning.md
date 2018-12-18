@@ -1,39 +1,39 @@
 
 - [1. kata](#1-kata)
-    - [1.1. runtime](#11-runtime)
-    - [1.2. agent](#12-agent)
-    - [1.3. shim](#13-shim)
-    - [1.4. proxy](#14-proxy)
+  - [1.1. runtime](#11-runtime)
+  - [1.2. agent](#12-agent)
+  - [1.3. shim](#13-shim)
+  - [1.4. proxy](#14-proxy)
 - [2. kvm](#2-kvm)
 - [3. qemu](#3-qemu)
 - [4. docker](#4-docker)
 - [5. kubernetes](#5-kubernetes)
 - [6. git](#6-git)
 - [7. linux](#7-linux)
-    - [7.1. 命令](#71-%E5%91%BD%E4%BB%A4)
+  - [7.1. 命令](#71-%E5%91%BD%E4%BB%A4)
 - [8. CI](#8-ci)
-    - [8.1. kata](#81-kata)
-        - [8.1.1. 本地做静态检查](#811-%E6%9C%AC%E5%9C%B0%E5%81%9A%E9%9D%99%E6%80%81%E6%A3%80%E6%9F%A5)
-        - [8.1.2. 配置 docker 使用 kata-runtime](#812-%E9%85%8D%E7%BD%AE-docker-%E4%BD%BF%E7%94%A8-kata-runtime)
-            - [8.1.2.1. i. systemd](#8121-i-systemd)
-            - [8.1.2.2. ii. Docker daemon.json](#8122-ii-docker-daemonjson)
-            - [8.1.3. 登入 kata 虚拟机](#813-%E7%99%BB%E5%85%A5-kata-%E8%99%9A%E6%8B%9F%E6%9C%BA)
+  - [8.1. kata](#81-kata)
+    - [8.1.1. 本地做静态检查](#811-%E6%9C%AC%E5%9C%B0%E5%81%9A%E9%9D%99%E6%80%81%E6%A3%80%E6%9F%A5)
+    - [8.1.2. 配置 docker 使用 kata-runtime](#812-%E9%85%8D%E7%BD%AE-docker-%E4%BD%BF%E7%94%A8-kata-runtime)
+      - [8.1.2.1. i. systemd](#8121-i-systemd)
+      - [8.1.2.2. ii. Docker daemon.json](#8122-ii-docker-daemonjson)
+      - [8.1.3. 登入 kata 虚拟机](#813-%E7%99%BB%E5%85%A5-kata-%E8%99%9A%E6%8B%9F%E6%9C%BA)
 - [9. kernel](#9-kernel)
-    - [9.1. cgroup](#91-cgroup)
+  - [9.1. cgroup](#91-cgroup)
 - [10. golang](#10-golang)
-    - [10.8. goroutine 和通道](#108-goroutine-%E5%92%8C%E9%80%9A%E9%81%93)
-        - [10.8.1. goroutine](#1081-goroutine)
-        - [10.8.2. 并发时钟服务器](#1082-%E5%B9%B6%E5%8F%91%E6%97%B6%E9%92%9F%E6%9C%8D%E5%8A%A1%E5%99%A8)
-        - [10.8.3. 通道](#1083-%E9%80%9A%E9%81%93)
-            - [10.8.3.1. 无缓冲通道](#10831-%E6%97%A0%E7%BC%93%E5%86%B2%E9%80%9A%E9%81%93)
-            - [10.8.3.2. 管道](#10832-%E7%AE%A1%E9%81%93)
-            - [10.8.3.3. 单向通道类型](#10833-%E5%8D%95%E5%90%91%E9%80%9A%E9%81%93%E7%B1%BB%E5%9E%8B)
-            - [10.8.3.4	缓冲通道](#10834-%E7%BC%93%E5%86%B2%E9%80%9A%E9%81%93)
-        - [10.8.4. 并行循环](#1084-%E5%B9%B6%E8%A1%8C%E5%BE%AA%E7%8E%AF)
-        - [10.8.5. 示例：并发的 Web 爬虫](#1085-%E7%A4%BA%E4%BE%8B%E5%B9%B6%E5%8F%91%E7%9A%84-web-%E7%88%AC%E8%99%AB)
-        - [10.8.6. 使用 select 多路复用](#1086-%E4%BD%BF%E7%94%A8-select-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8)
+  - [10.8. goroutine 和通道](#108-goroutine-%E5%92%8C%E9%80%9A%E9%81%93)
+    - [10.8.1. goroutine](#1081-goroutine)
+    - [10.8.2. 并发时钟服务器](#1082-%E5%B9%B6%E5%8F%91%E6%97%B6%E9%92%9F%E6%9C%8D%E5%8A%A1%E5%99%A8)
+    - [10.8.3. 通道](#1083-%E9%80%9A%E9%81%93)
+      - [10.8.3.1. 无缓冲通道](#10831-%E6%97%A0%E7%BC%93%E5%86%B2%E9%80%9A%E9%81%93)
+      - [10.8.3.2. 管道](#10832-%E7%AE%A1%E9%81%93)
+      - [10.8.3.3. 单向通道类型](#10833-%E5%8D%95%E5%90%91%E9%80%9A%E9%81%93%E7%B1%BB%E5%9E%8B)
+      - [10.8.3.4	缓冲通道](#10834-%E7%BC%93%E5%86%B2%E9%80%9A%E9%81%93)
+    - [10.8.4. 并行循环](#1084-%E5%B9%B6%E8%A1%8C%E5%BE%AA%E7%8E%AF)
+    - [10.8.5. 示例：并发的 Web 爬虫](#1085-%E7%A4%BA%E4%BE%8B%E5%B9%B6%E5%8F%91%E7%9A%84-web-%E7%88%AC%E8%99%AB)
+    - [10.8.6. 使用 select 多路复用](#1086-%E4%BD%BF%E7%94%A8-select-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8)
 - [11. 工具使用](#11-%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8)
-    - [11.1. 使用 goland 和 dlv 远程调试 kata](#111-%E4%BD%BF%E7%94%A8-goland-%E5%92%8C-dlv-%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95-kata)
+  - [11.1. 使用 goland 和 dlv 远程调试 kata](#111-%E4%BD%BF%E7%94%A8-goland-%E5%92%8C-dlv-%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95-kata)
 # 1. kata
 
 ## 1.1. runtime
@@ -105,6 +105,17 @@ iptables -t nat -S
 
 ```shell
 ip r
+```
+
+(9) 虚拟机没有 vi 或者 vim 命令时，可以使用如下方式创建 shell 脚本
+
+```shell
+cat <<EOF | tee /home/test1.sh
+#!/bin/bash
+while ((1));
+    do echo test > /dev/null;
+done
+EOF
 ```
 
 # 8. CI
