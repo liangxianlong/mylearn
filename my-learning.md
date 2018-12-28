@@ -10,6 +10,7 @@
 - [5. kubernetes](#5-kubernetes)
 - [6. git](#6-git)
   - [6.1. 配置代理](#61-%E9%85%8D%E7%BD%AE%E4%BB%A3%E7%90%86)
+  - [6.2. 命令](#62-%E5%91%BD%E4%BB%A4)
 - [7. linux](#7-linux)
   - [7.1. 命令](#71-%E5%91%BD%E4%BB%A4)
 - [8. CI](#8-ci)
@@ -67,6 +68,19 @@ git config --global http.proxy proxy.liang.com.cn:80
 git config --global https.proxy proxy.liang.com.cn:80
 ```
 
+## 6.2. 命令
+(1) push 代码到 gerrit 的 master 分支
+
+```shell
+git push origin HEAD:refs/for/master
+```
+
+(2) push 代码到 git 的 master 分支
+
+```shell
+git push -u origin master   // -u 参数，将本地 master 分支和远程 master 分支关联起来
+```
+
 # 7. linux
 
 ## 7.1. 命令
@@ -87,44 +101,32 @@ ps xf -o pid,ppid,stat,args
 ps axf
 ```
 
-(3) push 代码到 gerrit 的 master 分支
-
-```shell
-git push origin HEAD:refs/for/master
-```
-
-(4) push 代码到 git 的 master 分支
-
-```shell
-git push -u origin master   // -u 参数，将本地 master 分支和远程 master 分支关联起来
-```
-
-(5) 使用 journalctl 查看 kata-runtime 日志
+(3) 使用 journalctl 查看 kata-runtime 日志
 
 ```shell
 journalctl -f -t kata-runtime --since now
 journalctl -t kata-runtime --since '1 min ago' > tmp.log
 ```
 
-(6) 查看 json 格式的配置文件
+(4) 查看 json 格式的配置文件
 
 ```shell
 cat config.json | python -m json.tool
 ```
 
-(7) 查看 nat 的 iptables 规则
+(5) 查看 nat 的 iptables 规则
 
 ```shell
 iptables -t nat -S
 ```
 
-(8) 查看路由信息
+(6) 查看路由信息
 
 ```shell
 ip r
 ```
 
-(9) 虚拟机没有 vi 或者 vim 命令时，可以使用如下方式创建 shell 脚本
+(7) 虚拟机没有 vi 或者 vim 命令时，可以使用如下方式创建 shell 脚本
 
 ```shell
 cat <<EOF | tee /home/test1.sh
