@@ -9,6 +9,7 @@
 - [4. docker](#4-docker)
 - [5. kubernetes](#5-kubernetes)
 - [6. git](#6-git)
+  - [6.1. 配置代理](#61-%E9%85%8D%E7%BD%AE%E4%BB%A3%E7%90%86)
 - [7. linux](#7-linux)
   - [7.1. 命令](#71-%E5%91%BD%E4%BB%A4)
 - [8. CI](#8-ci)
@@ -54,6 +55,18 @@
 
 # 6. git
 
+## 6.1. 配置代理
+
+当处于内网环境时，需要配置代理才能从命令行访问 github，配置方法如下(公司内网代理为proxy.liang.com.cn:80):
+
+```shell
+git config --global http.proxy proxy.liang.com.cn:80
+```
+
+```shell
+git config --global https.proxy proxy.liang.com.cn:80
+```
+
 # 7. linux
 
 ## 7.1. 命令
@@ -68,6 +81,10 @@ cat /boot/config-`uname -r`
 
 ```shell
 ps xf -o pid,ppid,stat,args
+```
+
+```shll
+ps axf
 ```
 
 (3) push 代码到 gerrit 的 master 分支
