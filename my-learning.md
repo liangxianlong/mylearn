@@ -36,6 +36,14 @@
     - [10.8.6. 使用 select 多路复用](#1086-%E4%BD%BF%E7%94%A8-select-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8)
 - [11. 工具使用](#11-%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8)
   - [11.1. 使用 goland 和 dlv 远程调试 kata](#111-%E4%BD%BF%E7%94%A8-goland-%E5%92%8C-dlv-%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95-kata)
+- [12. containerd](#12-containerd)
+  - [12.1. containerd-shim-v2](#121-containerd-shim-v2)
+    - [12.1.1. 二进制命名](#1211-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%91%BD%E5%90%8D)
+    - [12.1.2. shim v2 API](#1212-shim-v2-api)
+      - [12.1.2.1. shim manage API](#12121-shim-manage-api)
+      - [12.1.2.2. container manage API](#12122-container-manage-api)
+    - [12.1.3. 流程](#1213-%E6%B5%81%E7%A8%8B)
+    - [12.1.4. 参考链接](#1214-%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5)
 # 1. kata
 
 ## 1.1. runtime
@@ -614,3 +622,107 @@ process, err = createSandbox(ctx, ociSpec, runtimeConfig, containerID, bundlePat
 8.点击 Debug，代码就会断在7中断点处，接下来就可以进行单步调试了:
 
 ![](./assets/breakpoint.png)
+
+# 12. containerd
+
+## 12.1. containerd-shim-v2
+
+Runtime v2(shim API)引入了第一个可供runtime authors与containerd集成的shim API。该shim API是轻量的，并且其范围限定在容器的执行生命周期内。
+
+### 12.1.1. 二进制命名
+
+使用者在创建容器的时候可以指定runtime：
+**runc**
+
+```shell
+ctr run -d -t --runtime io.containerd.runc.v1
+```
+
+**kata**
+
+```shell
+ctr run -d -t --runtime io.containerd.kata.v2
+```
+
+使用者按照上述方式指定一个runtime name时，比如io.containerd.kata.v2，其实同时指定了runtime的名字和版本。containerd会将--runtime指定的值转换为真正的shim:
+
+```shell
+io.containerd.kata.v2 -> containerd-shim-kata-v2
+```
+
+### 12.1.2. shim v2 API
+
+下图所示为 shim v2 API 的架构图，由图中可知道 shim v2 定义了两套 API，其中 **shim manage API** 用于管理具体实现 shim v2 API 的 shim 进程（比如，kata 容器自己实现的 containerd-shim-kata-v2 ）。 **container manage API** 主要用于容器的生命周期管理。
+
+![](./assets/containerd-shim-v2-arc.png)
+
+#### 12.1.2.1. shim manage API
+
+**shim manage API** 主要用于具体shim进程的管理：
+**Start**
+shim manage API必须实现start子命令:
+
+1. 此命令启动一个shim进程
+
+2. 该命令必须返回一个地址用于containerd发起针对容器操作的API请求
+
+**Delete**
+shim manage API必须实现delete子命令:
+
+1. 当containerd不能通过rpc和shim进行通信时，delete允许containerd删除任何由容器创建或者挂载的资源
+
+2. 当shim被SIGKILL时，需要调用delete
+
+3. 当containerd重启或者重新连接到shim的时候，需要调用delete
+
+#### 12.1.2.2. container manage API
+
+container manage API 接口参见如下定义:
+
+```go
+syntax = "proto3";
+package containerd.task.v2;
+service Task {
+        rpc State(StateRequest) returns (StateResponse);
+        rpc Create(CreateTaskRequest) returns (CreateTaskResponse);
+        rpc Start(StartRequest) returns (StartResponse);
+        rpc Delete(DeleteRequest) returns (DeleteResponse);
+        rpc Pids(PidsRequest) returns (PidsResponse);
+        rpc Pause(google.protobuf.Empty) returns (google.protobuf.Empty);
+        rpc Resume(google.protobuf.Empty) returns (google.protobuf.Empty);
+        rpc Checkpoint(CheckpointTaskRequest) returns (google.protobuf.Empty);
+        rpc Kill(KillRequest) returns (google.protobuf.Empty);
+        rpc Exec(ExecProcessRequest) returns (google.protobuf.Empty);
+        rpc ResizePty(ResizePtyRequest) returns (google.protobuf.Empty);
+        rpc CloseIO(CloseIORequest) returns (google.protobuf.Empty);
+        rpc Update(UpdateTaskRequest) returns (google.protobuf.Empty);
+        rpc Wait(WaitRequest) returns (WaitResponse);
+        rpc Stats(StatsRequest) returns (StatsResponse);
+}
+```
+
+### 12.1.3. 流程
+
+以```ctr run -d -t --runtime io.containerd.kata.v2```为例k刻画其执行流程如下图,其中重要的流程在图中以阿拉伯数字标示。
+
+![](./assets/shim-v2-run.png)
+
+关于上述流程的一些说明（省略了错误判断，只保留主干）：
+
+1. NewClient函数会创建一个containerd的client
+2. NewContainer创建容器的元数据
+3. NewTask起到两个作用(引用上图中的1和2):
+
+    a. 通过一系列调用最后会执行到shim manage API的Start函数，Start函数本质上就是概述中Start子命令的具体实现
+    b. 通过1中返回的shim调用Create函数，Create函数会调用shim v2的具体实现
+4. 步骤3后，会启动如下两个进程，但是其实容器并未真正启动。容器的启动由步骤5所描述的流程实现
+    a. containerd-shim-kata-v2
+    b. qemu-lite-system-x86_64
+5. 调用taskt.Start(引用上图中的3)，最终调用和4类似，s.task.Start会调用shim v2的具体实现。此时会真正启动容器。
+
+### 12.1.4. 参考链接
+
+https://github.com/containerd/containerd/pull/2434
+https://github.com/containerd/containerd/issues/2426
+https://github.com/kata-containers/runtime/issues/485
+https://github.com/kata-containers/runtime/pull/572
