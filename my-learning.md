@@ -41,6 +41,8 @@
     - [12.1.1. 二进制命名](#1211-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%91%BD%E5%90%8D)
     - [12.1.2. shim v2 API](#1212-shim-v2-api)
       - [12.1.2.1. shim manage API](#12121-shim-manage-api)
+        - [Start](#start)
+        - [Delete](#delete)
       - [12.1.2.2. container manage API](#12122-container-manage-api)
     - [12.1.3. 流程](#1213-%E6%B5%81%E7%A8%8B)
     - [12.1.4. 参考链接](#1214-%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5)
@@ -660,14 +662,17 @@ io.containerd.kata.v2 -> containerd-shim-kata-v2
 #### 12.1.2.1. shim manage API
 
 **shim manage API** 主要用于具体shim进程的管理：
-**Start**
+
+##### Start
+
 shim manage API必须实现start子命令:
 
 1. 此命令启动一个shim进程
 
 2. 该命令必须返回一个地址用于containerd发起针对容器操作的API请求
 
-**Delete**
+##### Delete
+
 shim manage API必须实现delete子命令:
 
 1. 当containerd不能通过rpc和shim进行通信时，delete允许containerd删除任何由容器创建或者挂载的资源
