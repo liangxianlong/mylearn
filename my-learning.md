@@ -20,6 +20,7 @@
       - [8.1.2.1. i. systemd](#8121-i-systemd)
       - [8.1.2.2. ii. Docker daemon.json](#8122-ii-docker-daemonjson)
       - [8.1.3. 登入 kata 虚拟机](#813-%E7%99%BB%E5%85%A5-kata-%E8%99%9A%E6%8B%9F%E6%9C%BA)
+      - [8.1.4. 使用 qmp 命令与 qemu-lite 进程交互](#814-%E4%BD%BF%E7%94%A8-qmp-%E5%91%BD%E4%BB%A4%E4%B8%8E-qemu-lite-%E8%BF%9B%E7%A8%8B%E4%BA%A4%E4%BA%92)
 - [9. kernel](#9-kernel)
   - [9.1. cgroup](#91-cgroup)
 - [10. golang](#10-golang)
@@ -79,6 +80,7 @@ git config --global https.proxy proxy.liang.com.cn:80
 ```
 
 ## 6.2. 命令
+
 (1) push 代码到 gerrit 的 master 分支
 
 ```shell
@@ -105,6 +107,10 @@ cat /boot/config-`uname -r`
 
 ```shell
 ps xf -o pid,ppid,stat,args
+```
+
+```shell
+ps -eLf | grep ${pid} //查看进程的线程
 ```
 
 ```shll
@@ -192,6 +198,14 @@ Add the following definitions to /etc/docker/daemon.json:
 
 ```shell
 socat "stdin,raw,echo=0,escape=0x11" "unix:/run/vc/vm/${sandbox-id}/console.sock"
+```
+
+#### 8.1.4. 使用 qmp 命令与 qemu-lite 进程交互
+
+```shell
+# cd ${yourdir}/qemu/scripts/qmp
+# ./qmp-shell /run/vc/vm/${sandbox-id}/qmp.sock
+# query-cpus（查询虚拟机的vcpu）
 ```
 
 # 9. kernel
@@ -729,6 +743,9 @@ service Task {
 ### 12.1.4. 参考链接
 
 https://github.com/containerd/containerd/pull/2434
+
 https://github.com/containerd/containerd/issues/2426
+
 https://github.com/kata-containers/runtime/issues/485
+
 https://github.com/kata-containers/runtime/pull/572
