@@ -623,7 +623,7 @@ ln -sf ${youDirectory}/kata-runtime.swapper.sh kata-runtime.swapper
 
 ![](./assets/goland.png)
 
-6.在 10.74.120.130 上 执行如下命令
+6.在远程 host 主机上执行如下命令
 
 ```shell
 docker run --runtime dlv -d -ti busybox /bin/sh
