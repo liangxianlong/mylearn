@@ -37,6 +37,7 @@
     - [10.8.6. 使用 select 多路复用](#1086-%E4%BD%BF%E7%94%A8-select-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8)
 - [11. 工具使用](#11-%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8)
   - [11.1. 使用 goland 和 dlv 远程调试 kata](#111-%E4%BD%BF%E7%94%A8-goland-%E5%92%8C-dlv-%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95-kata)
+  - [11.2. 命令行调试 kata](#112-%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%B0%83%E8%AF%95-kata)
 - [12. containerd](#12-containerd)
   - [12.1. containerd-shim-v2](#121-containerd-shim-v2)
     - [12.1.1. 二进制命名](#1211-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%91%BD%E5%90%8D)
@@ -93,6 +94,12 @@ git push origin HEAD:refs/for/master
 git push -u origin master   // -u 参数，将本地 master 分支和远程 master 分支关联起来
 ```
 
+(3) 查看某一个进程的 goroutine
+
+```shell
+# kill -s USR1 $(pidof dockerd)
+```
+
 # 7. linux
 
 ## 7.1. 命令
@@ -100,46 +107,47 @@ git push -u origin master   // -u 参数，将本地 master 分支和远程 mast
 (1) 查看当前系统的内核编译选项方法如下:
 
 ```shell
-cat /boot/config-`uname -r`
+# cat /boot/config-`uname -r`
 ```
 
 (2) 查看进程关系
 
 ```shell
-ps xf -o pid,ppid,stat,args
+# ps xf -o pid,ppid,stat,args
 ```
 
 ```shell
-ps -eLf | grep ${pid} //查看进程的线程
+# ps -eLf | grep ${pid} //查看进程的线程
 ```
-
-```shll
-ps axf
-```
-
-(3) 使用 journalctl 查看 kata-runtime 日志
 
 ```shell
-journalctl -f -t kata-runtime --since now
-journalctl -t kata-runtime --since '1 min ago' > tmp.log
+# ps axf
+```
+
+(3) 使用 journalctl 查看日志
+
+```shell
+# journalctl -f -t kata-runtime --since now
+# journalctl -t kata-runtime --since '1 min ago' > tmp.log
+# journalctl  -xe -u kubelet -f
 ```
 
 (4) 查看 json 格式的配置文件
 
 ```shell
-cat config.json | python -m json.tool
+# cat config.json | python -m json.tool
 ```
 
 (5) 查看 nat 的 iptables 规则
 
 ```shell
-iptables -t nat -S
+# iptables -t nat -S
 ```
 
 (6) 查看路由信息
 
 ```shell
-ip r
+# ip r
 ```
 
 (7) 虚拟机没有 vi 或者 vim 命令时，可以使用如下方式创建 shell 脚本
@@ -165,6 +173,11 @@ EOF
 2. export KATA_CI_NO_NETWORK=true
 3. make check
 4. make test
+5. 集成测试时单独测试 docker 的某一项(测试 cpu 相关)：
+
+```shell
+# RUNTIME=kata-runtime FOCUS="cpu" make docker
+```
 
 ### 8.1.2. 配置 docker 使用 kata-runtime
 
@@ -638,6 +651,12 @@ process, err = createSandbox(ctx, ociSpec, runtimeConfig, containerID, bundlePat
 8.点击 Debug，代码就会断在7中断点处，接下来就可以进行单步调试了:
 
 ![](./assets/breakpoint.png)
+
+## 11.2. 命令行调试 kata
+
+```shell
+# dlv exec /usr/bin/kata-runtime -- update --cpuset-cpus 0 ${id}
+```
 
 # 12. containerd
 
