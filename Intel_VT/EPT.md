@@ -1,14 +1,24 @@
 # 内存虚拟化
-[TOC]
+<!-- vscode-markdown-toc -->
+* 1. [EPT](#EPT)
+	* 1.1. [EPT原理](#EPT-1)
+	* 1.2. [EPT的硬件支持](# EPT-1)
+	* 1.3. [VPID](#VPID)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
 - - -
 
 VT-x提供了Extended Page Table(EPT)技术，直接在硬件上支持GVA-GPA-HPA的两次地址转换，极大的降低了内存虚拟化的难度，也进一步提高了内存虚拟化的性能。
 _ _ _
 此外，为了进一步提高TLB的使用效率，VT-x还引入了Virtual Processor ID(VPID)功能，进一步增加了内存虚拟化的性能。
 - - -
-## EPT
+##  1. <a name='EPT'></a>EPT
 - - -
-### EPT原理
+###  1.1. <a name='EPT-1'></a>EPT原理
 
 _ _ _
 EPT的原理可参见如下图：
@@ -27,7 +37,7 @@ _ _ _
 ```
 - - -
 
-### EPT的硬件支持
+###  1.2. <a name='EPT-1'></a>EPT的硬件支持
 _ _ _
 为了支持EPT，VT-x规范在VMCS的==VM-Execution==控制域中提供了==Enable EPT==字段。VM-Entry时该字段被置为==1==，EPT功能就会被启用。
 _ _ _
@@ -59,7 +69,7 @@ _ _ _
 2.EPT页表的动态创建。有些VMM采用懒惰方法，一开始EPT页表为空，当第一次使用发生EPT Violation时再建立映射。使用
 ```
 - - -
-### VPID
+###  1.3. <a name='VPID'></a>VPID
 _ _ _
 每次VM-Entry和VM-Exit时，CPU会强制TLB内容全部失效，以避免VMM以及不同虚拟机虚拟处理器之间TLB的混用，因为硬件无法区分一个TLB项是属于VMM还是某一特定的虚拟机虚拟处理器。
 _ _ _
