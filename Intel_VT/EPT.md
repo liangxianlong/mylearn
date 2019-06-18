@@ -2,7 +2,7 @@
 <!-- vscode-markdown-toc -->
 * 1. [EPT](#EPT)
 	* 1.1. [EPT原理](#EPT-1)
-	* 1.2. [EPT的硬件支持](# EPT-1)
+	* 1.2. [EPT的硬件支持](#EPT-1)
 	* 1.3. [VPID](#VPID)
 
 <!-- vscode-markdown-toc-config
