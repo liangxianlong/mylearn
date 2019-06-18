@@ -1,5 +1,5 @@
-[TOC]
 # 内存虚拟化
+[TOC]
 - - -
 
 VT-x提供了Extended Page Table(EPT)技术，直接在硬件上支持GVA-GPA-HPA的两次地址转换，极大的降低了内存虚拟化的难度，也进一步提高了内存虚拟化的性能。
