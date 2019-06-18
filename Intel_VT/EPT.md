@@ -14,7 +14,7 @@ _ _ _
 EPT的原理可参见如下图：
 _ _ _
 
-![](./assets/EPT原理.png)
+![](./assets/EPT_principle.png)
 _ _ _
 假设客户机页表和EPT页表都是4级页表，CPU完成一次地址转换的基本过程如下(必须明确的是在GUEST中的CR3寄存器以及L4-L1都保存的都是GPA，所以GUEST中每一次差学下级页表的时候都需要EPT进行转换)：
 _ _ _
@@ -45,7 +45,7 @@ _ _ _
 _ _ _
 EPT页表的转换过程和CR3页表转换类似，如下所示为CPU使用EPT进行地址转换的过程：
 _ _ _
-![](./assets/EPT页表转换.png)
+![](./assets/EPT_pagetranslation.png)
 _ _ _
 EPT通过EPT页表中的SP字段支持大小为2MB或者1GB的超级页。当CPU发现SP字段为1时，就会停止继续向下遍历页表，而是直接转换。
 _ _ _
