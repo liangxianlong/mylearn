@@ -49,15 +49,15 @@ _ _ _
 
 VMCS的主要信息存放在“VMCS数据域”，VT-x提供了两条指令用于访问VMCS。
 
-* **VMREAD：**读取VMCS中指定的区域。
-* **VMWRITE：**写VMCS中指定的域。
+* **VMREAD**：读取VMCS中指定的区域。
+* **VMWRITE**：写VMCS中指定的域。
 
 具体来说，VMCS数据域包括下列6大类信息。
 
-* **客户机状态域：**保存客户机运行时，即非根模式时的CPU状态。VM-Exit，CPU保存当前状态至客户据状态域；VM-Entry，CPU从客户机状态域恢复状态。
-* **宿主机状态域：**保存VMM运行时，即根模式时的CPU状态。当VM-Exit时，CPU从该域恢复CPU状态。
-* **VM-Entry控制域：**控制VM-Entry的过程。
-* **VM-Execution控制域：**控制处理器在VMX非根模式下的行为。
-* **VM-Exit控制域：**控制VM-Exit的过程。
-* **VM-Exit信息域：**提供VM-Exit原因和其他信息，该域是只读的。
+* **客户机状态域**：保存客户机运行时，即非根模式时的CPU状态。VM-Exit，CPU保存当前状态至客户据状态域；VM-Entry，CPU从客户机状态域恢复状态。
+* **宿主机状态域**：保存VMM运行时，即根模式时的CPU状态。当VM-Exit时，CPU从该域恢复CPU状态。
+* **VM-Entry控制域**：控制VM-Entry的过程。
+* **VM-Execution控制域**：控制处理器在VMX非根模式下的行为。
+* **VM-Exit控制域**：控制VM-Exit的过程。
+* **VM-Exit信息域**：提供VM-Exit原因和其他信息，该域是只读的。
 - - -
