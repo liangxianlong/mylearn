@@ -61,3 +61,61 @@ VMCS的主要信息存放在“VMCS数据域”，VT-x提供了两条指令用�
 * **VM-Exit控制域**：控制VM-Exit的过程。
 * **VM-Exit信息域**：提供VM-Exit原因和其他信息，该域是只读的。
 - - -
+## VMX操作模式
+_ _ _
+* **VMXON**：打开VMX操作模式。
+* **VMXOFF**：关闭VMX操作模式。
+_ _ _
+
+下图所示为VMX操作模式图。
+_ _ _
+![](./assets/VMX_operation.png)
+
+- - -
+## VM-Entry
+_ _ _
+VM-Entry是指CPU由根模式切换到非根模式，本质上是指CPU从VMM切换到客户机执行。
+
+VT-x为VM-Entry提供了两条指令。
+
+* **VMLAUNCH**:用于执行过VMCLEAER的VMCS的第一次VM-Entry。
+* **VMRESUME**:用于执行过VMLAUNCH的VMCS的后续VM-Entry。
+
+在执行VM-Entry之前，VMM会设置好VMCS相关域的内容。
+
+VM-Entry的过程如下。
+
+* 执行基本检查，确保VM-Entry能执行。
+* 检查VMCS中宿主机状态域的有效性，确保下一次VM-Exit时可以正确地从客户机切换到VMM。
+* 检查VMCS中客户机状态域的有效性，据此装载处理器状态。
+* 根据VM-Entry MSR-load装载MSR寄存器。
+* 根据VM-Entry事件注入控制的配置，注入事件到客户机中。
+- - -
+## VM-Exit
+_ _ _
+VM-Exit是指CPU从非根模式切换到根模式，从客户机切换到VMM的操作。
+
+敏感指令运行在VMX非根模式下，其行为有以下3种可能。
+
+* 行为不变化，也不引起VM-Exit。
+* 行为变化，产生VM-Exit且需要VMM截获并模拟敏感指令。
+* 行为变化，但是是否产生VM-Exit可以通过VM-Execution域控制。
+
+VM-Execution控制域主要用于控制CPU在非根模式运行时的行为。其主要控制三个方面。
+
+* 控制某敏感指令是否产生VM-Exit。
+* 若某些敏感指令不产生VM-Exit，控制该指令的行为。
+* 异常和中断是否产生VM-Exit。
+
+VM-Exit控制域规定了VM-Exit发生时CPU的行为。
+
+VM-Exit信息域保存了VM-Exit时的相关信息，比如Exit原因。
+
+一个具体的VM-Exit过程大致如下。
+
+* CPU记录VM-Exit的原因到VMCS相应域中，VM-Entry interruption-information字段的有效位被清零。
+* CPU状态被保存到客户机状态域。
+* 根据VMCS中宿主机状态域和VM-Exit控制域的设置，将宿主机状态加载到CPU相应寄存器。
+* CPU由非根模式切换到根模式，从宿主机状态域中CS:RIP指定的VM-Exit入口函数开始执行。
+* * *
+# CPU虚拟化的实现
