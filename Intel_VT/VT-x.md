@@ -1,4 +1,22 @@
-# CPU虚拟化的硬件支持
+<!-- vscode-markdown-toc -->
+* [概述](#)
+* [VMCS](#VMCS)
+* [VMX操作模式](#VMX)
+* [VM-Entry](#VM-Entry)
+* [VM-Exit](#VM-Exit)
+* [概述](#-1)
+* [vCPU的创建](#vCPU)
+* [vCPU的运行](#vCPU-1)
+	* [上下文切换](#-1)
+	* [vCPU的硬件优化](#vCPU-1)
+* [vCPU的退出](#vCPU-1)
+* [vCPU的再运行](#vCPU-1)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc --># CPU虚拟化的硬件支持
 - - -
 ## 概述
 _ _ _
@@ -140,20 +158,22 @@ vCPU描述符在创建之后，需要进一步初始化才能使用。VMCS的创
 - - -
 ## vCPU的运行
 _ _ _
+
 vCPU创建并初始化好之后，就可以通过调度程序被调度执行。
-_ _ _
+- - -
+
 ### 上下文切换
 _ _ _
 在VT-x的支持下，vCPU的上下文可以分为两部分(硬件使用的VMCS以及VMM所维护的部分)。频繁的上下文切换会带来不小的性能开销，VMM使用“惰性保存/恢复”的方法进行优化，其基本思想是尽量将寄存器的保存/恢复延迟到最后一刻。
 - - -
-###vCPU的硬件优化
+### vCPU的硬件优化
 _ _ _
 VT-x提供的优化分为如下两种。
 
 * 无条件优化:是指以往在软件虚拟化下必须陷入到VMM中的敏感指令，通过VT-x已可以在客户机中直接执行。
 * 条件优化:是指通过VMCS的VM-Execution控制域，可以配置某些敏感指令是否产生VM-Exit而陷入到VMM中。
 - - -
-## vCPU的推出
+## vCPU的退出
 _ _ _
 vCPU的退出在VT-x中表现为发生VM-Exit。vCPU的退出大体u上可以分为如下三类。
 
