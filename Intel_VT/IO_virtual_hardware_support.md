@@ -104,6 +104,7 @@ VT-d对上述两种缓存提供了三种粒度的刷新操作。
 	| Length  | 以字节数表示DMAR表占用的内存大小|
 	| HAW | 该平台支持的DMA操作可寻址的最大物理地址空间|
 	| DMA Remapping Structures  | 指向下一级硬件描述数据结构，包括DRHD和RMRR两种|
+
 	此处我们只关注DMA Remapping Structures字段为**DRHD**的情况。
 - DRHD(DMA Remapping Hardware Unit Definition)：用于描述重映射硬件，一个DRHD结构对应一个DMA重映射硬件。DRHD的主要字段如下表
 
