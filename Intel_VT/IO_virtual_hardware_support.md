@@ -97,7 +97,7 @@ VT-d对上述两种缓存提供了三种粒度的刷新操作。
 
 硬件主要由三个主要的数据结构描述。
 
-- DMAR(DMA Remapping Reporting):汇报平台VT-d相关硬件的整体情况。其字段如下。
+- **DMAR**(DMA Remapping Reporting):汇报平台VT-d相关硬件的整体情况。其字段如下。
 
 	| 字段名  | 描述 |
 	|-------|:---:|
@@ -106,7 +106,7 @@ VT-d对上述两种缓存提供了三种粒度的刷新操作。
 	| DMA Remapping Structures  | 指向下一级硬件描述数据结构，包括DRHD和RMRR两种|
 
 	此处我们只关注DMA Remapping Structures字段为**DRHD**的情况。
-- DRHD(DMA Remapping Hardware Unit Definition)：用于描述重映射硬件，一个DRHD结构对应一个DMA重映射硬件。DRHD的主要字段如下表
+- **DRHD**(DMA Remapping Hardware Unit Definition)：用于描述重映射硬件，一个DRHD结构对应一个DMA重映射硬件。DRHD的主要字段如下表
 
 	| 字段名  | 描述 |
 	|-------|:---:|
@@ -114,7 +114,7 @@ VT-d对上述两种缓存提供了三种粒度的刷新操作。
 	| Register Base Address | 指向DMA重映射硬件寄存器的基地址，系统软件通过读写这些寄存器操作DMA重映射硬件|
 	| Device Scope  | 设备域，数组结构，成员为DSS。当DMA重映射硬件工作在非INCLUDE_A模式时，该数组所包含设备的DMA传输被当前DMA重映射硬件截获|
 
-- DSS(Device Scope Structure)：描述DRHD所管辖的设备。DSS可以代表两种类型的设备，一种是PCI终端设备，一种是PCI桥设备。如下表所示为DSS字段。
+- **DSS**(Device Scope Structure)：描述DRHD所管辖的设备。DSS可以代表两种类型的设备，一种是PCI终端设备，一种是PCI桥设备。如下表所示为DSS字段。
 
 	| 字段名  | 描述 |
 	|-------|:---:|
